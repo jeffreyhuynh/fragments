@@ -1,0 +1,18 @@
+{
+  "name": "fragments",
+  "private": true,
+  "version": "0.0.1",
+  "description": "CCP555 labs - back-end API",
+  "engines": {
+    "node": ">=16.15.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeffreyhuynh/fragments.git"
+  },
+  "author": "Jeffrey Huynh",
+  "license": "UNLICENSED"
+}
