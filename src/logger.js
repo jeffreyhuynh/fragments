@@ -1,3 +1,5 @@
+// src/logger.js
+
 const options = { level: process.env.LOG_LEVEL || 'info' };
 
 if (options.level === 'debug') {
