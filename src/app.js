@@ -4,6 +4,8 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
+const passport = require('passport');
+const authorization = require('./authorization');
 
 const logger = require('./logger');
 const pino = require('pino-http')({
@@ -16,6 +18,9 @@ app.use(pino);
 app.use(helmet());
 app.use(cors());
 app.use(compression());
+
+passport.use(authorization.strategy());
+app.use(passport.initialize());
 
 // define routes
 app.use('/', require('./routes'));

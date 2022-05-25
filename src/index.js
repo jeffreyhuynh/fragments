@@ -2,7 +2,7 @@
 
 require('dotenv').config();
 
-const logger = require('.logger');
+const logger = require('./logger');
 
 process.on('uncaughtException', (err, origin) => {
   logger.fatal({ err, origin }, 'uncaughtException');
