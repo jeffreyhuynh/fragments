@@ -15,3 +15,7 @@ process.on('unhandledRejection', (reason, promise) => {
 });
 
 require('./server');
+
+// Testing lint
+if (1 + 2) {
+}
