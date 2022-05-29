@@ -6,7 +6,7 @@ const app = require('../../src/app');
 
 describe('GET /v1/fragments', () => {
   test('expect deny on unauthenticated request', () =>
-    request(app).get('/v1/fragments').expect(500));
+    request(app).get('/v1/fragments').expect(401));
 
   test('expect deny on incorrect credentials', () =>
     request(app).get('/v1/fragments').auth('invalid@email.com', 'incorrect_password').expect(401));
