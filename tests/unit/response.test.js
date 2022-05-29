@@ -1,6 +1,7 @@
 // tests/unit/response.test.js
 
 const { createErrorResponse, createSuccessResponse } = require('../../src/response');
+
 describe('API Responses', () => {
   test('createErrorResponse()', () => {
     const errorResponse = createErrorResponse(404, 'not found');
