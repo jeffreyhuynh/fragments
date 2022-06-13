@@ -81,6 +81,10 @@ describe('Fragment class', () => {
       expect(() => new Fragment({ ownerId: '1234', type: 'text/plain', size: -1 })).toThrow();
     });
 
+    test('id must be a string', () => {
+      expect(() => new Fragment({ ownerId: '1234', type: 'text/plain', size: 0, id: 1 })).toThrow();
+    });
+
     test('invalid types throw', () => {
       expect(
         () => new Fragment({ ownerId: '1234', type: 'application/msword', size: 1 })

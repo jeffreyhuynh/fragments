@@ -2,8 +2,8 @@
 
 const express = require('express');
 const cors = require('cors');
-const helmet = require('helmet');
 const compression = require('compression');
+const helmet = require('helmet');
 const passport = require('passport');
 const authorization = require('./authorization');
 const { createErrorResponse } = require('./response');

@@ -1,8 +1,8 @@
 // src/index.js
 
-require('dotenv').config();
-
 const logger = require('./logger');
+
+require('dotenv').config();
 
 process.on('uncaughtException', (err, origin) => {
   logger.fatal({ err, origin }, 'uncaughtException');

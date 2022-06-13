@@ -1,10 +1,8 @@
 // src/authorization/cognito.js
 
-// We'll use our authorize middle module
 const authorize = require('./authorize-middleware');
 const BearerStrategy = require('passport-http-bearer').Strategy;
 const { CognitoJwtVerifier } = require('aws-jwt-verify');
-
 const logger = require('../logger');
 
 if (!(process.env.AWS_COGNITO_POOL_ID && process.env.AWS_COGNITO_CLIENT_ID)) {

@@ -1,7 +1,6 @@
 // src/authorization/authorize-middleware.js
 
 const passport = require('passport');
-
 const { createErrorResponse } = require('../response');
 const hash = require('../hash');
 const logger = require('../logger');

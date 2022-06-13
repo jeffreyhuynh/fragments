@@ -1,13 +1,8 @@
 // src/model/fragment.js
 
-// Don't!
-// Use https://www.npmjs.com/package/nanoid to create unique IDs
-// >:(
 const { randomUUID } = require('crypto');
-// Use https://www.npmjs.com/package/content-type to create/parse Content-Type headers
 const contentType = require('content-type');
 
-// Functions for working with fragment metadata/data using our DB
 const {
   readFragment,
   writeFragment,
@@ -33,6 +28,10 @@ class Fragment {
       throw new Error(`size must be a number, got size=${size}`);
     }
 
+    if (id && typeof id !== 'string') {
+      throw new Error(`id must be a string if given, got id=${id}`);
+    }
+
     if (size >= 0) {
       this.size = size;
     } else {
@@ -42,7 +41,7 @@ class Fragment {
     if (validTypes.includes(contentType.parse(type).type)) {
       this.type = type;
     } else {
-      throw new Error(`type is invalid, got type=${type}`);
+      throw new Error(`content type is invalid, got type=${type}`);
     }
 
     if (id) {
@@ -74,8 +73,9 @@ class Fragment {
    */
   static async byUser(ownerId, expand = false) {
     if (typeof ownerId !== 'string') {
-      throw new Error(`ownerId is required, got ownerId=${ownerId}`);
+      throw new Error(`ownerId must be a string, got ownerId=${ownerId}`);
     }
+
     return Promise.resolve(listFragments(ownerId, expand));
   }
 
@@ -86,10 +86,19 @@ class Fragment {
    * @returns Promise<Fragment>
    */
   static async byId(ownerId, id) {
+    if (typeof ownerId !== 'string') {
+      throw new Error(`ownerId must be a string, got ownerId=${ownerId}`);
+    }
+    if (typeof id !== 'string') {
+      throw new Error(`id must be a string, got id=${id}`);
+    }
+
     const result = await readFragment(ownerId, id);
+
     if (typeof result == 'undefined') {
       throw new Error(`fragment with id = ${id} not found`);
     }
+
     return Promise.resolve(result);
   }
 
@@ -101,11 +110,12 @@ class Fragment {
    */
   static delete(ownerId, id) {
     if (typeof ownerId !== 'string') {
-      throw new Error(`ownerId is required, got ownerId=${ownerId}`);
+      throw new Error(`ownerId must be a string, got ownerId=${ownerId}`);
     }
     if (typeof id !== 'string') {
-      throw new Error(`id is required, got id=${id}`);
+      throw new Error(`id must be a string, got id=${id}`);
     }
+
     return Promise.resolve(deleteFragment(ownerId, id));
   }
 
@@ -136,8 +146,7 @@ class Fragment {
       throw new Error(`data is invalid, got data = ${data}`);
     }
     this.size = data.length;
-    this.updated = new Date().toISOString();
-    await writeFragment(this);
+    this.save();
     return Promise.resolve(writeFragmentData(this.ownerId, this.id, data));
   }
 

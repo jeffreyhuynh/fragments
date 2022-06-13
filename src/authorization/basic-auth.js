@@ -1,6 +1,5 @@
 // src/authorization/basic-auth.js
 
-// We'll use our authorize middle module
 const authorize = require('./authorize-middleware');
 const auth = require('http-auth');
 const authPassport = require('http-auth-passport');

@@ -1,7 +1,9 @@
 // src/routes/api/post.js
+
 const contentType = require('content-type');
 const { Fragment } = require('../../model/fragment');
 const { createSuccessResponse, createErrorResponse } = require('../../response');
+
 require('dotenv').config();
 
 module.exports = (req, res) => {
@@ -12,7 +14,7 @@ module.exports = (req, res) => {
       type: contentType.parse(req).type,
       size: req.body.length,
     });
-    fragment.save();
+
     fragment.setData(req.body);
     res
       .status(201)
