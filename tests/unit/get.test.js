@@ -43,7 +43,7 @@ describe('GET /v1/fragments', () => {
         .set('Content-Type', 'text/plain')
         .send(data);
       const fragment = await request(app)
-        .get('/v1/fragments/' + 'aaaaa')
+        .get('/v1/fragments/' + res.body.fragment.id + 'a')
         .auth('user1@email.com', 'password1');
       expect(fragment.statusCode).toBe(404);
     });
