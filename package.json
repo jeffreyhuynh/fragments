@@ -19,7 +19,7 @@
     "type": "git",
     "url": "git+https://github.com/jeffreyhuynh/fragments.git"
   },
-  "author": "Jeffrey Huynh",
+  "author": "Jeffrey Huynh <jhuynh34@myseneca.ca>",
   "license": "UNLICENSED",
   "devDependencies": {
     "cross-env": "^7.0.3",

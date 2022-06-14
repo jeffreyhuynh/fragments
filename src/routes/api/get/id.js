@@ -1,15 +1,26 @@
 // src/routes/api/get/id.js
 
-const { createSuccessResponse, createErrorResponse } = require('../../../response');
+const logger = require('../../../logger');
+const { createErrorResponse } = require('../../../response');
 const { Fragment } = require('../../../model/fragment');
 
 module.exports = async (req, res) => {
   try {
-    const fragment = await Fragment.byId(req.user, req.params['id']);
-    const data = await fragment.getData();
-    res.status(200).json(createSuccessResponse({ data: data }));
+    var fragment = await Fragment.byId(req.user, req.params['id']);
+    let data = await fragment.getData();
+    if (fragment.isText) {
+      data = data.toString();
+    }
+
+    // according to specification, should return raw data in response
+    res.status(200).set({ 'Content-Type': fragment.mimeType }).send(data);
+
     // must be expanded to include 415 for invalid .ext or type later
-  } catch (e) {
-    res.status(404).json(createErrorResponse({ code: 404, message: 'fragment does not exist' }));
+  } catch (err) {
+    res.status(404).json(createErrorResponse(404, 'fragment does not exist'));
+    logger.warn(
+      { fragment, errorMessage: err.message },
+      'request to non-existent fragment was made'
+    );
   }
 };

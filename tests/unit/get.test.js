@@ -31,7 +31,6 @@ describe('GET /v1/fragments', () => {
         .auth('user1@email.com', 'password1')
         .set('Content-Type', 'text/plain')
         .send(data);
-      console.log(res.header.location);
       const fragment = await request(app).get('/v1/fragments/' + res.body.fragment.id);
       expect(fragment.statusCode).toBe(401);
     });
@@ -43,25 +42,25 @@ describe('GET /v1/fragments', () => {
         .auth('user1@email.com', 'password1')
         .set('Content-Type', 'text/plain')
         .send(data);
-      console.log(res.header.location);
       const fragment = await request(app)
         .get('/v1/fragments/' + 'aaaaa')
         .auth('user1@email.com', 'password1');
       expect(fragment.statusCode).toBe(404);
     });
 
-    test('authenticated request on GET/:id with existing fragment returns data', async () => {
+    test('authenticated request on GET/:id with existing text/plain fragment returns text', async () => {
       const data = Buffer.from('hello');
       const res = await request(app)
         .post('/v1/fragments')
         .auth('user1@email.com', 'password1')
         .set('Content-Type', 'text/plain')
         .send(data);
-      console.log(res.header.location);
-      const fragment = await request(app)
+      const returnedData = await request(app)
         .get('/v1/fragments/' + res.body.fragment.id)
         .auth('user1@email.com', 'password1');
-      expect(fragment.statusCode).toBe(200);
+      expect(returnedData.statusCode).toBe(200);
+      expect(returnedData.text).toEqual('hello');
+      expect(returnedData.type).toEqual('text/plain');
     });
   });
 });

@@ -1,7 +1,8 @@
 // src/model/fragment.js
 
-const { randomUUID } = require('crypto');
 const contentType = require('content-type');
+const logger = require('../logger');
+const { randomUUID } = require('crypto');
 
 const {
   readFragment,
@@ -32,23 +33,13 @@ class Fragment {
       throw new Error(`id must be a string if given, got id=${id}`);
     }
 
-    if (size >= 0) {
-      this.size = size;
-    } else {
-      throw new Error(`size cannot be negative, got size=${size}`);
-    }
-
-    if (validTypes.includes(contentType.parse(type).type)) {
-      this.type = type;
-    } else {
-      throw new Error(`content type is invalid, got type=${type}`);
-    }
-
     if (id) {
       this.id = id;
     } else {
       this.id = randomUUID();
     }
+
+    this.ownerId = ownerId;
 
     if (created) {
       this.created = created;
@@ -62,7 +53,19 @@ class Fragment {
       this.updated = new Date().toISOString();
     }
 
-    this.ownerId = ownerId;
+    if (validTypes.includes(contentType.parse(type).type)) {
+      this.type = type;
+    } else {
+      throw new Error(`content type is invalid, got type=${type}`);
+    }
+
+    if (size >= 0) {
+      this.size = size;
+    } else {
+      throw new Error(`size cannot be negative, got size=${size}`);
+    }
+
+    logger.info({ id: this.id }, 'new fragment created');
   }
 
   /**
