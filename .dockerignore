@@ -6,7 +6,9 @@ tests/
 !tests/.htpasswd
 .env*
 env.jest
+Dockerfile
 .eslintrc.js
+.npmrc
 .git/
 .gitignore
 .prettier*
