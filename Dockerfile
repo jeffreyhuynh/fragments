@@ -26,6 +26,6 @@ WORKDIR /app
 COPY --from=build --chown=node:node ./build .
 COPY --chown=node:node . .
 
-CMD "node" "src/index.js"
+CMD ["node", "src/index.js"]
 
 EXPOSE 8080
