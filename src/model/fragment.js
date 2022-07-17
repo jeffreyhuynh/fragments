@@ -13,7 +13,7 @@ const {
   deleteFragment,
 } = require('./data');
 
-const validTypes = ['text/plain'];
+const validTypes = ['text/plain', 'text/markdown', 'text/html', 'application/json'];
 
 class Fragment {
   constructor({ id, ownerId, created, updated, type, size = 0 }) {
@@ -79,7 +79,7 @@ class Fragment {
       throw new Error(`ownerId must be a string, got ownerId=${ownerId}`);
     }
 
-    return Promise.resolve(listFragments(ownerId, expand));
+    return listFragments(ownerId, expand);
   }
 
   /**
@@ -102,7 +102,7 @@ class Fragment {
       throw new Error(`fragment with id = ${id} not found`);
     }
 
-    return Promise.resolve(result);
+    return result;
   }
 
   /**
@@ -119,7 +119,7 @@ class Fragment {
       throw new Error(`id must be a string, got id=${id}`);
     }
 
-    return Promise.resolve(deleteFragment(ownerId, id));
+    return deleteFragment(ownerId, id);
   }
 
   /**
@@ -128,7 +128,7 @@ class Fragment {
    */
   save() {
     this.updated = new Date().toISOString();
-    return Promise.resolve(writeFragment(this));
+    return writeFragment(this);
   }
 
   /**
@@ -136,7 +136,7 @@ class Fragment {
    * @returns Promise<Buffer>
    */
   getData() {
-    return Promise.resolve(readFragmentData(this.ownerId, this.id));
+    return readFragmentData(this.ownerId, this.id);
   }
 
   /**
@@ -150,7 +150,7 @@ class Fragment {
     }
     this.size = data.length;
     this.save();
-    return Promise.resolve(writeFragmentData(this.ownerId, this.id, data));
+    return writeFragmentData(this.ownerId, this.id, data);
   }
 
   /**
@@ -177,8 +177,12 @@ class Fragment {
    */
   get formats() {
     let availableFormats;
+
+    // to be expanded when images are supported
     if (this.isText) {
-      availableFormats = ['text/plain'];
+      availableFormats = ['text/plain', 'text/markdown', 'text/html'];
+    } else {
+      availableFormats = ['application/json'];
     }
     return availableFormats;
   }

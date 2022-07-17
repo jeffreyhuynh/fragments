@@ -181,7 +181,15 @@ describe('Fragment class', () => {
         type: 'text/plain; charset=utf-8',
         size: 0,
       });
-      expect(fragment.formats).toEqual(['text/plain']);
+      expect(fragment.formats).toEqual(['text/plain', 'text/markdown', 'text/html']);
+    });
+    test('formats returns the expected result for plain text', () => {
+      const fragment = new Fragment({
+        ownerId: '1234',
+        type: 'application/json',
+        size: 0,
+      });
+      expect(fragment.formats).toEqual(['application/json']);
     });
   });
 
@@ -275,6 +283,13 @@ describe('Fragment class', () => {
       expect(async () => await Fragment.delete()).rejects.toThrow();
       expect(async () => await Fragment.delete(1)).rejects.toThrow();
       expect(async () => await Fragment.delete('1', 1)).rejects.toThrow();
+    });
+
+    test('byId() must have valid args', () => {
+      expect(async () => await Fragment.byId()).rejects.toThrow();
+      expect(async () => await Fragment.byId(1)).rejects.toThrow();
+      expect(async () => await Fragment.byId(1, 1)).rejects.toThrow();
+      expect(async () => await Fragment.byId('1', 1)).rejects.toThrow();
     });
   });
 });

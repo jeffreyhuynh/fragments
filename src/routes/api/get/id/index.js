@@ -1,16 +1,13 @@
-// src/routes/api/get/id.js
+// src/routes/api/get/id/index.js
 
-const logger = require('../../../logger');
-const { createErrorResponse } = require('../../../response');
-const { Fragment } = require('../../../model/fragment');
+const logger = require('../../../../logger');
+const { createErrorResponse } = require('../../../../response');
+const { Fragment } = require('../../../../model/fragment');
 
 module.exports = async (req, res) => {
   try {
     var fragment = await Fragment.byId(req.user, req.params['id']);
     let data = await fragment.getData();
-    if (fragment.isText) {
-      data = data.toString();
-    }
 
     // according to specification, should return raw data in response
     res.status(200).set({ 'Content-Type': fragment.mimeType }).send(data);

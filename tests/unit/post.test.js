@@ -69,6 +69,39 @@ describe('POST /v1/fragments', () => {
     expect(res.body).toHaveProperty('fragment');
   });
 
+  test('text/html should return proper content type', async () => {
+    const data = Buffer.from('hello');
+    const res = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set('Content-Type', 'text/html')
+      .send(data);
+    expect(res.body).toHaveProperty('fragment');
+    expect(res.body.fragment.type).toEqual('text/html');
+  });
+
+  test('text/markdown should return proper content type', async () => {
+    const data = Buffer.from('hello');
+    const res = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set('Content-Type', 'text/markdown')
+      .send(data);
+    expect(res.body).toHaveProperty('fragment');
+    expect(res.body.fragment.type).toEqual('text/markdown');
+  });
+
+  test('application/json should return proper content type', async () => {
+    const data = { a: 'b' };
+    const res = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set('Content-Type', 'application/json')
+      .send(data);
+    expect(res.body).toHaveProperty('fragment');
+    expect(res.body.fragment.type).toEqual('application/json');
+  });
+
   test('successful POST should return fragment properties', async () => {
     const data = Buffer.from('hello');
     const res = await request(app)
