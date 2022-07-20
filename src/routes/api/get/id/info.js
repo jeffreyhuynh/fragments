@@ -7,11 +7,7 @@ const { Fragment } = require('../../../../model/fragment');
 module.exports = async (req, res) => {
   try {
     var fragment = await Fragment.byId(req.user, req.params['id']);
-
-    // according to specification, should return raw data in response
-    res.status(200).set({ 'Content-Type': fragment.mimeType }).send(fragment);
-
-    // must be expanded to include 415 for invalid .ext or type later
+    res.status(200).setHeader('content-type', fragment.type).send(fragment);
   } catch (err) {
     res.status(404).json(createErrorResponse(404, 'fragment does not exist'));
     logger.warn(

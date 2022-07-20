@@ -1,7 +1,6 @@
 // src/routes/api/post.js
 
 const logger = require('../../logger');
-const contentType = require('content-type');
 const { Fragment } = require('../../model/fragment');
 const { createSuccessResponse, createErrorResponse } = require('../../response');
 
@@ -12,7 +11,7 @@ module.exports = async (req, res) => {
   if (Buffer.isBuffer(req.body) === true) {
     var fragment = new Fragment({
       ownerId: req.user,
-      type: contentType.parse(req).type,
+      type: req.headers['content-type'],
       size: req.body.length,
     });
 
