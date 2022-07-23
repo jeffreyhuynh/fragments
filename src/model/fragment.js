@@ -98,8 +98,6 @@ class Fragment {
 
     const result = await readFragment(ownerId, id);
 
-    logger.info({ result }, 'byId returned object');
-
     if (typeof result == 'undefined') {
       throw new Error(`id lookup failed: fragment with id = ${id} not found`);
     }
