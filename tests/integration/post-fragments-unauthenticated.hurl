@@ -9,7 +9,6 @@ Content-Type: text/plane
 HTTP/1.1 401
 
 [Asserts]
-[Asserts]
 jsonpath "$.status" == "error"
 jsonpath "$.error.code" == 401
 jsonpath "$.error.message" == "Unauthorized"

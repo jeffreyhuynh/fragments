@@ -11,7 +11,6 @@ Content-Type: text/plane
 HTTP/1.1 415
 
 [Asserts]
-[Asserts]
 jsonpath "$.status" == "error"
 jsonpath "$.error.code" == 415
 jsonpath "$.error.message" == "invalid request: content type not supported"

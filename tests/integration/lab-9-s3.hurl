@@ -6,7 +6,7 @@ Authorization: Basic dXNlcjFAZW1haWwuY29tOnBhc3N3b3JkMQ==
 # send plaintext fragment
 Content-Type: text/plain
 
-```This is a fragment!```
+```Hello S3!```
 
 HTTP/1.1 201
 
@@ -18,17 +18,38 @@ jsonpath "$.fragment.ownerId" matches "^[0-9a-fA-F]+$"
 jsonpath "$.fragment.created" isString
 jsonpath "$.fragment.updated" isString
 jsonpath "$.fragment.type" == "text/plain"
-jsonpath "$.fragment.size" == 19
+jsonpath "$.fragment.size" == 9
 
 [Captures]
 url: header "Location"
 
+# GET existing fragment
 GET {{url}}
 Authorization: Basic dXNlcjFAZW1haWwuY29tOnBhc3N3b3JkMQ==
 
 HTTP/1.1 200
 Content-Type: text/plain
-Content-Length: 19
+Content-Length: 9
 
 [Asserts]
-body == "This is a fragment!"
+body == "Hello S3!"
+
+# DELETE fragment
+DELETE {{url}}
+Authorization: Basic dXNlcjFAZW1haWwuY29tOnBhc3N3b3JkMQ==
+
+HTTP/1.1 200
+
+[Asserts]
+jsonpath "$.status" == "ok"
+
+# Try GET on deleted fragment
+GET {{url}}
+Authorization: Basic dXNlcjFAZW1haWwuY29tOnBhc3N3b3JkMQ==
+
+HTTP/1.1 404
+
+[Asserts]
+jsonpath "$.status" == "error"
+jsonpath "$.error.code" == 404
+jsonpath "$.error.message" == "fragment does not exist"
