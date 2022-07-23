@@ -10,7 +10,7 @@ ENV NPM_CONFIG_COLOR=false
 
 WORKDIR /build
 
-COPY package*.json .
+COPY package*.json ./
 
 RUN npm ci --only=production
 
