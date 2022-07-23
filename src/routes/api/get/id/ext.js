@@ -16,7 +16,7 @@ module.exports = async (req, res) => {
           data = md.render(data.toString());
         // eslint-disable-next-line no-fallthrough
         case 'text/html':
-          res.status(200).setHeader('content-type', 'text/html').send(data);
+          res.status(200).setHeader('content-type', Buffer.from('text/html')).send(data);
           break;
         default:
           res.status(415).json(createErrorResponse(415, 'unsupported fragment conversion type'));

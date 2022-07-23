@@ -90,19 +90,28 @@ class Fragment {
    */
   static async byId(ownerId, id) {
     if (typeof ownerId !== 'string') {
-      throw new Error(`ownerId must be a string, got ownerId=${ownerId}`);
+      throw new Error(`id lookup failed: ownerId must be a string, got ownerId=${ownerId}`);
     }
     if (typeof id !== 'string') {
-      throw new Error(`id must be a string, got id=${id}`);
+      throw new Error(`id lookup failed: id must be a string, got id=${id}`);
     }
 
     const result = await readFragment(ownerId, id);
 
+    logger.info({ result }, 'byId returned object');
+
     if (typeof result == 'undefined') {
-      throw new Error(`fragment with id = ${id} not found`);
+      throw new Error(`id lookup failed: fragment with id = ${id} not found`);
     }
 
-    return result;
+    return new Fragment({
+      id: result.id,
+      ownerId: result.ownerId,
+      created: result.created,
+      updated: result.updated,
+      type: result.type,
+      size: result.size,
+    });
   }
 
   /**
@@ -126,7 +135,7 @@ class Fragment {
    * Saves the current fragment to the database
    * @returns Promise
    */
-  save() {
+  async save() {
     this.updated = new Date().toISOString();
     return writeFragment(this);
   }
@@ -135,7 +144,7 @@ class Fragment {
    * Gets the fragment's data from the database
    * @returns Promise<Buffer>
    */
-  getData() {
+  async getData() {
     return readFragmentData(this.ownerId, this.id);
   }
 

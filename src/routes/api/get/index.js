@@ -10,5 +10,8 @@ module.exports = async (req, res) => {
     { user: req.user, expand: req.query.expand, fragments: userFrags },
     'GET /v1/fragments received'
   );
-  res.status(200).json(createSuccessResponse({ fragments: userFrags }));
+  res
+    .status(200)
+    .setHeader('content-type', Buffer.from('application/json'))
+    .json(createSuccessResponse({ fragments: userFrags }));
 };
