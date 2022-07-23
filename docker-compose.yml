@@ -12,5 +12,6 @@ services:
       - AWS_COGNITO_POOL_ID
       - AWS_COGNITO_CLIENT_ID
       - HTPASSWD
+      - API_URL
       - AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME:-fragments}
       - AWS_DYNAMODB_TABLE_NAME=${AWS_DYNAMODB_TABLE_NAME:-fragments}
