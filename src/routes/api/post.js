@@ -16,6 +16,7 @@ module.exports = async (req, res) => {
     });
 
     try {
+      logger.info({ body: req.body }, 'fragment body');
       await fragment.setData(req.body);
       await fragment.save();
       res
