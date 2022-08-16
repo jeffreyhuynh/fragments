@@ -13,7 +13,16 @@ const {
   deleteFragment,
 } = require('./data');
 
-const validTypes = ['text/plain', 'text/markdown', 'text/html', 'application/json'];
+const validTypes = [
+  'text/plain',
+  'text/markdown',
+  'text/html',
+  'application/json',
+  'image/png',
+  'image/jpeg',
+  'image/webp',
+  'image/gif',
+];
 
 class Fragment {
   constructor({ id, ownerId, created, updated, type, size = 0 }) {
@@ -179,6 +188,14 @@ class Fragment {
   }
 
   /**
+   * Returns true if this fragment is a text/* mime type
+   * @returns {boolean} true if fragment's type is text/*
+   */
+  get isImage() {
+    return RegExp('image/.*').test(this.type);
+  }
+
+  /**
    * Returns the formats into which this fragment type can be converted
    * @returns {Array<string>} list of supported mime types
    */
@@ -188,6 +205,8 @@ class Fragment {
     // to be expanded when images are supported
     if (this.isText) {
       availableFormats = ['text/plain', 'text/markdown', 'text/html'];
+    } else if (this.isImage) {
+      availableFormats = ['image/png', 'image/jpeg', 'image/webp', 'image/gif'];
     } else {
       availableFormats = ['application/json'];
     }
