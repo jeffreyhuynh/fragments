@@ -134,11 +134,6 @@ class Fragment {
     if (typeof id !== 'string') {
       throw new Error(`id must be a string, got id=${id}`);
     }
-    try {
-      Fragment.byId(ownerId, id);
-    } catch (err) {
-      throw new Error(`could not find fragment with id=${id}`);
-    }
     return deleteFragment(ownerId, id);
   }
 
