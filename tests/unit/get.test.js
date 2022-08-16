@@ -4,6 +4,8 @@ const request = require('supertest');
 
 const app = require('../../src/app');
 const md = require('markdown-it')();
+const fs = require('fs');
+const path = require('path');
 
 describe('GET /v1/fragments', () => {
   describe('plain GET testing', () => {
@@ -180,6 +182,126 @@ describe('GET /v1/fragments', () => {
       expect(returnedData.statusCode).toBe(200);
       expect(returnedData.type).toEqual('text/html');
       expect(returnedData.text).toEqual(md.render(data));
+    });
+
+    test('authenticated request on GET/:id.ext with png input should return correct content-types', async () => {
+      const img = fs.readFileSync(path.resolve(__dirname, '../../assets/potato.png'));
+      const data = Buffer.from(img);
+      const res = await request(app)
+        .post('/v1/fragments')
+        .auth('user1@email.com', 'password1')
+        .set('Content-Type', 'image/png')
+        .send(data);
+      expect(res.body).toHaveProperty('fragment');
+      expect(res.body.fragment.type).toEqual('image/png');
+
+      const returnedData = await request(app)
+        .get('/v1/fragments/' + res.body.fragment.id + '.jpg')
+        .auth('user1@email.com', 'password1');
+      expect(returnedData.statusCode).toBe(200);
+      expect(returnedData.type).toEqual('image/jpeg');
+
+      const returnedData2 = await request(app)
+        .get('/v1/fragments/' + res.body.fragment.id + '.webp')
+        .auth('user1@email.com', 'password1');
+      expect(returnedData2.statusCode).toBe(200);
+      expect(returnedData2.type).toEqual('image/webp');
+
+      const returnedData3 = await request(app)
+        .get('/v1/fragments/' + res.body.fragment.id + '.gif')
+        .auth('user1@email.com', 'password1');
+      expect(returnedData3.statusCode).toBe(200);
+      expect(returnedData3.type).toEqual('image/gif');
+    });
+
+    test('authenticated request on GET/:id.ext with jpg input should return correct content-types', async () => {
+      const img = fs.readFileSync(path.resolve(__dirname, '../../assets/potato.jpg'));
+      const data = Buffer.from(img);
+      const res = await request(app)
+        .post('/v1/fragments')
+        .auth('user1@email.com', 'password1')
+        .set('Content-Type', 'image/jpeg')
+        .send(data);
+      expect(res.body).toHaveProperty('fragment');
+      expect(res.body.fragment.type).toEqual('image/jpeg');
+
+      const returnedData = await request(app)
+        .get('/v1/fragments/' + res.body.fragment.id + '.png')
+        .auth('user1@email.com', 'password1');
+      expect(returnedData.statusCode).toBe(200);
+      expect(returnedData.type).toEqual('image/png');
+
+      const returnedData2 = await request(app)
+        .get('/v1/fragments/' + res.body.fragment.id + '.webp')
+        .auth('user1@email.com', 'password1');
+      expect(returnedData2.statusCode).toBe(200);
+      expect(returnedData2.type).toEqual('image/webp');
+
+      const returnedData3 = await request(app)
+        .get('/v1/fragments/' + res.body.fragment.id + '.gif')
+        .auth('user1@email.com', 'password1');
+      expect(returnedData3.statusCode).toBe(200);
+      expect(returnedData3.type).toEqual('image/gif');
+    });
+
+    test('authenticated request on GET/:id.ext with webp input should return correct content-types', async () => {
+      const img = fs.readFileSync(path.resolve(__dirname, '../../assets/potato.webp'));
+      const data = Buffer.from(img);
+      const res = await request(app)
+        .post('/v1/fragments')
+        .auth('user1@email.com', 'password1')
+        .set('Content-Type', 'image/webp')
+        .send(data);
+      expect(res.body).toHaveProperty('fragment');
+      expect(res.body.fragment.type).toEqual('image/webp');
+
+      const returnedData2 = await request(app)
+        .get('/v1/fragments/' + res.body.fragment.id + '.png')
+        .auth('user1@email.com', 'password1');
+      expect(returnedData2.statusCode).toBe(200);
+      expect(returnedData2.type).toEqual('image/png');
+
+      const returnedData = await request(app)
+        .get('/v1/fragments/' + res.body.fragment.id + '.jpg')
+        .auth('user1@email.com', 'password1');
+      expect(returnedData.statusCode).toBe(200);
+      expect(returnedData.type).toEqual('image/jpeg');
+
+      const returnedData3 = await request(app)
+        .get('/v1/fragments/' + res.body.fragment.id + '.gif')
+        .auth('user1@email.com', 'password1');
+      expect(returnedData3.statusCode).toBe(200);
+      expect(returnedData3.type).toEqual('image/gif');
+    });
+
+    test('authenticated request on GET/:id.ext with gif input should return correct content-types', async () => {
+      const img = fs.readFileSync(path.resolve(__dirname, '../../assets/potato.gif'));
+      const data = Buffer.from(img);
+      const res = await request(app)
+        .post('/v1/fragments')
+        .auth('user1@email.com', 'password1')
+        .set('Content-Type', 'image/gif')
+        .send(data);
+      expect(res.body).toHaveProperty('fragment');
+      expect(res.body.fragment.type).toEqual('image/gif');
+
+      const returnedData2 = await request(app)
+        .get('/v1/fragments/' + res.body.fragment.id + '.png')
+        .auth('user1@email.com', 'password1');
+      expect(returnedData2.statusCode).toBe(200);
+      expect(returnedData2.type).toEqual('image/png');
+
+      const returnedData = await request(app)
+        .get('/v1/fragments/' + res.body.fragment.id + '.jpg')
+        .auth('user1@email.com', 'password1');
+      expect(returnedData.statusCode).toBe(200);
+      expect(returnedData.type).toEqual('image/jpeg');
+
+      const returnedData3 = await request(app)
+        .get('/v1/fragments/' + res.body.fragment.id + '.webp')
+        .auth('user1@email.com', 'password1');
+      expect(returnedData3.statusCode).toBe(200);
+      expect(returnedData3.type).toEqual('image/webp');
     });
 
     test('authenticated request on GET/:id.html with unsupported conversion on existing fragment returns 415', async () => {

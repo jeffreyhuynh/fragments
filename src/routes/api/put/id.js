@@ -10,7 +10,6 @@ module.exports = async (req, res) => {
   try {
     var fragment = await Fragment.byId(req.user, req.params['id']);
     if (req.headers['content-type'] === fragment.type) {
-      console.log(req.body);
       await fragment.setData(req.body);
       await fragment.save();
       res
@@ -25,7 +24,6 @@ module.exports = async (req, res) => {
     }
   } catch (err) {
     res.status(404).json(createErrorResponse(404, 'fragment does not exist'));
-    console.log(err.message);
     logger.warn(
       { fragment, errorMessage: err.message },
       'request to non-existent fragment was made'
