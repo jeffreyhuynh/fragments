@@ -102,6 +102,50 @@ describe('POST /v1/fragments', () => {
     expect(res.body.fragment.type).toEqual('application/json');
   });
 
+  test('image/png should return proper content type', async () => {
+    const data = Buffer.from('test');
+    const res = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set('Content-Type', 'image/png')
+      .send(data);
+    expect(res.body).toHaveProperty('fragment');
+    expect(res.body.fragment.type).toEqual('image/png');
+  });
+
+  test('image/jpeg should return proper content type', async () => {
+    const data = Buffer.from('test');
+    const res = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set('Content-Type', 'image/jpeg')
+      .send(data);
+    expect(res.body).toHaveProperty('fragment');
+    expect(res.body.fragment.type).toEqual('image/jpeg');
+  });
+
+  test('image/webp should return proper content type', async () => {
+    const data = Buffer.from('test');
+    const res = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set('Content-Type', 'image/webp')
+      .send(data);
+    expect(res.body).toHaveProperty('fragment');
+    expect(res.body.fragment.type).toEqual('image/webp');
+  });
+
+  test('image/gif should return proper content type', async () => {
+    const data = Buffer.from('test');
+    const res = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set('Content-Type', 'image/gif')
+      .send(data);
+    expect(res.body).toHaveProperty('fragment');
+    expect(res.body.fragment.type).toEqual('image/gif');
+  });
+
   test('successful POST should return fragment properties', async () => {
     const data = Buffer.from('hello');
     const res = await request(app)
