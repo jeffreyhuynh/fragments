@@ -24,6 +24,7 @@ module.exports = async (req, res) => {
         .location(process.env.API_URL + '/v1/fragments/' + fragment.id)
         .json(createSuccessResponse({ fragment: fragment }));
     } catch (err) {
+      // this should never happen
       res.status(500).json(createErrorResponse(500, 'fragment was unable to be saved'));
       logger.warn({ fragment, errorMessage: err.message }, 'failed to save fragment');
     }

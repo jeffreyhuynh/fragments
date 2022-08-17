@@ -154,6 +154,51 @@ describe('GET /v1/fragments', () => {
       expect(returnedData.text['c']).toEqual('d');
     });
 
+    test('authenticated request on GET/:id.txt with existing text/plain fragment returns txt', async () => {
+      const data = 'test';
+      const res = await request(app)
+        .post('/v1/fragments')
+        .auth('user1@email.com', 'password1')
+        .set('Content-Type', 'text/plain')
+        .send(data);
+      const returnedData = await request(app)
+        .get('/v1/fragments/' + res.body.fragment.id + '.txt')
+        .auth('user1@email.com', 'password1');
+      expect(returnedData.statusCode).toBe(200);
+      expect(returnedData.type).toEqual('text/plain');
+      expect(returnedData.text).toEqual(data);
+    });
+
+    test('authenticated request on GET/:id.md with existing text/markdown fragment returns md', async () => {
+      const data = '# test';
+      const res = await request(app)
+        .post('/v1/fragments')
+        .auth('user1@email.com', 'password1')
+        .set('Content-Type', 'text/markdown')
+        .send(data);
+      const returnedData = await request(app)
+        .get('/v1/fragments/' + res.body.fragment.id + '.md')
+        .auth('user1@email.com', 'password1');
+      expect(returnedData.statusCode).toBe(200);
+      expect(returnedData.type).toEqual('text/markdown');
+      expect(returnedData.text).toEqual(data);
+    });
+
+    test('authenticated request on GET/:id.json with existing application/json fragment returns json', async () => {
+      const data = { a: 1, b: 2 };
+      const res = await request(app)
+        .post('/v1/fragments')
+        .auth('user1@email.com', 'password1')
+        .set('Content-Type', 'application/json')
+        .send(data);
+      const returnedData = await request(app)
+        .get('/v1/fragments/' + res.body.fragment.id + '.json')
+        .auth('user1@email.com', 'password1');
+      expect(returnedData.statusCode).toBe(200);
+      expect(returnedData.type).toEqual('application/json');
+      expect(JSON.parse(returnedData.text)).toEqual(data);
+    });
+
     test('authenticated request on GET/:id.html with existing text/html fragment returns html', async () => {
       const data = '<p>data</p>';
       const res = await request(app)
@@ -328,6 +373,69 @@ describe('GET /v1/fragments', () => {
         .get('/v1/fragments/' + res.body.fragment.id + '.mp4')
         .auth('user1@email.com', 'password1');
       expect(returnedData.statusCode).toBe(415);
+    });
+
+    test('authenticated request on GET/:id.ext with image input should return 415 on text formats', async () => {
+      const img = fs.readFileSync(path.resolve(__dirname, '../../assets/potato.gif'));
+      const data = Buffer.from(img);
+      const res = await request(app)
+        .post('/v1/fragments')
+        .auth('user1@email.com', 'password1')
+        .set('Content-Type', 'image/gif')
+        .send(data);
+      expect(res.body).toHaveProperty('fragment');
+      expect(res.body.fragment.type).toEqual('image/gif');
+
+      const returnedData = await request(app)
+        .get('/v1/fragments/' + res.body.fragment.id + '.txt')
+        .auth('user1@email.com', 'password1');
+      expect(returnedData.statusCode).toBe(415);
+
+      const returnedData2 = await request(app)
+        .get('/v1/fragments/' + res.body.fragment.id + '.md')
+        .auth('user1@email.com', 'password1');
+      expect(returnedData2.statusCode).toBe(415);
+
+      const returnedData3 = await request(app)
+        .get('/v1/fragments/' + res.body.fragment.id + '.html')
+        .auth('user1@email.com', 'password1');
+      expect(returnedData3.statusCode).toBe(415);
+
+      const returnedData4 = await request(app)
+        .get('/v1/fragments/' + res.body.fragment.id + '.json')
+        .auth('user1@email.com', 'password1');
+      expect(returnedData4.statusCode).toBe(415);
+    });
+
+    test('authenticated request on GET/:id.ext with txt input should return 415 on image formats', async () => {
+      const data = 'text';
+      const res = await request(app)
+        .post('/v1/fragments')
+        .auth('user1@email.com', 'password1')
+        .set('Content-Type', 'text/plain')
+        .send(data);
+      expect(res.body).toHaveProperty('fragment');
+      expect(res.body.fragment.type).toEqual('text/plain');
+
+      const returnedData = await request(app)
+        .get('/v1/fragments/' + res.body.fragment.id + '.png')
+        .auth('user1@email.com', 'password1');
+      expect(returnedData.statusCode).toBe(415);
+
+      const returnedData2 = await request(app)
+        .get('/v1/fragments/' + res.body.fragment.id + '.jpg')
+        .auth('user1@email.com', 'password1');
+      expect(returnedData2.statusCode).toBe(415);
+
+      const returnedData3 = await request(app)
+        .get('/v1/fragments/' + res.body.fragment.id + '.webp')
+        .auth('user1@email.com', 'password1');
+      expect(returnedData3.statusCode).toBe(415);
+
+      const returnedData4 = await request(app)
+        .get('/v1/fragments/' + res.body.fragment.id + '.gif')
+        .auth('user1@email.com', 'password1');
+      expect(returnedData4.statusCode).toBe(415);
     });
 
     test('authenticated request on GET/:id/info with existing fragment returns metadata', async () => {

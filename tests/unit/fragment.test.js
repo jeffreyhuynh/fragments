@@ -183,13 +183,21 @@ describe('Fragment class', () => {
       });
       expect(fragment.formats).toEqual(['text/plain', 'text/markdown', 'text/html']);
     });
-    test('formats returns the expected result for plain text', () => {
+    test('formats returns the expected result for json', () => {
       const fragment = new Fragment({
         ownerId: '1234',
         type: 'application/json',
         size: 0,
       });
       expect(fragment.formats).toEqual(['application/json']);
+    });
+    test('formats returns the expected result for images', () => {
+      const fragment = new Fragment({
+        ownerId: '1234',
+        type: 'image/png',
+        size: 0,
+      });
+      expect(fragment.formats).toEqual(['image/png', 'image/jpeg', 'image/webp', 'image/gif']);
     });
   });
 

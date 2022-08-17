@@ -200,8 +200,6 @@ class Fragment {
    */
   get formats() {
     let availableFormats;
-
-    // to be expanded when images are supported
     if (this.isText) {
       availableFormats = ['text/plain', 'text/markdown', 'text/html'];
     } else if (this.isImage) {
